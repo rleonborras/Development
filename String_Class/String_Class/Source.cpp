@@ -6,15 +6,11 @@
 
 int main() {
 
-	String Hello("Hello");
+	String a = "hello";
+	String b = "World";
 
-	Hello.print();
-	Hello.empty();
-	Hello.size();
-	//Hello.clear();
-	Hello.empty();
-	Hello.print();
-	Hello = "thx";
+	a = b;
+
 
 	system("pause");
 	return 1;

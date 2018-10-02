@@ -1,25 +1,40 @@
-#pragma once
-#include <string.h>
-#include <iostream>
 #ifndef STRING_CLASS
 #define STRING_CLASS
 
-typedef unsigned int uint;
+#include <string.h>
+
+
 
 class String {
 private:
 
-	 char* str = nullptr;
-	uint new_allocated = 0;
+	char* str = nullptr;
+	unsigned int mem_allocated = 0;
 
 public:
 
-	String( char* string):str(string), new_allocated(strlen(string)) {};
+	String(const char* string){
+		if (string != NULL) {
+			mem_allocated = strlen(string) + 1;
+			str = new char[mem_allocated];
+			strcpy(str,string);
+		}
+	};
 
-	String(String &string) :str(string.str), new_allocated(strlen(string.str)) {};
+	String(const String &string){
+		if (string.str != NULL) {
+			mem_allocated = string.mem_allocated;
+			str = new char[mem_allocated];
+			strcpy(str,string.str);
+		}
+	};
 
 	String(){};
 
+	~String(){
+		if (str != NULL) 
+			delete[] str;
+	};
 
 public:
 
@@ -31,13 +46,16 @@ public:
 			return true;
 	}
 
-	uint size() const {
-		return strlen(str);
+	unsigned int lenght() const {
+		if (str != NULL) 
+			return strlen(str);
 	}
 
 	void clear() {
-		str = nullptr;
-		new_allocated = 0;
+		if (str != NULL) {
+			delete[] str;
+			mem_allocated = 0;
+		}
 	}
 	
 	void print() {
@@ -47,27 +65,33 @@ public:
 
 public:
 
-	void operator=(const String &string) {
-		void clear();
-		new_allocated=strlen(string.str);
-		str = (string.str);
+	String operator=(const String &string) {
 
+		
+		mem_allocated=(string.mem_allocated);
+		if (mem_allocated != 0) {
+			delete[]str;
+			str = new char[mem_allocated];
+			return strcpy_s(str,sizeof(str), string.str);
+		}	
+		else
+			return *this;
 	}
-	
-	void operator+(const String &string) {
-		if (str != NULL) {
-			strcat(str, string.str);
-			new_allocated += string.new_allocated;
-		}
-		else{
-			strcpy(str, string.str);
-			new_allocated = string.new_allocated;
-		}
-	}
+	//
+	//void operator+(const String &string) {
+	//	if (str != NULL) {
+	//		strcat(str, string.str);
+	//		mem_allocated += string.mem_allocated;
+	//	}
+	//	else{
+	//		strcpy(str, string.str);
+	//		mem_allocated = string.mem_allocated;
+	//	}
+	//}
 
-	bool operator == (const String &string) {
+	//bool operator == (const String &string) {
 
-	}
+	//}
 
 };
 #endif // !1
